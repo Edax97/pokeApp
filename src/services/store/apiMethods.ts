@@ -1,6 +1,6 @@
 import { PokemonResultT, PokemonT } from "./port";
 
-const URL = 'http://localhost:8000'
+const URL = process.env["APIURL"] || 'http://localhost:8000'
 
 export async function getPokeListAPI(): Promise<PokemonResultT[]> {
   try {

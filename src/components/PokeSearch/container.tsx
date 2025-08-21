@@ -24,7 +24,7 @@ const PokeSearchContainer: React.FC<PokeSearchProps> = ({ onSearch, debounceTime
   }, [query, onSearch])
 
   return (
-    <div className="mb-4 w-80">
+    <div className="mb-6 w-80 mx-auto">
       <input
         type="text"
         value={query}

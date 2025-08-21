@@ -18,7 +18,7 @@ export type PokemonT = {
 }
 
 export interface StorePortI {
-  getPokemon(name: string): Promise<PokemonT>
+  getPokemon(name: string): Promise<PokemonT | null>
   getPokemonList(): Promise<PokemonResultT[]>
 }
 

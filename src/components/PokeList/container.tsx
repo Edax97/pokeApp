@@ -1,13 +1,12 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PokemonResultT } from "../../services/store/port";
 import { useStoreCtx } from "../../services/store/context";
-import { AbortController } from "happy-dom";
-import PokeItemContainer from "../PokeItem/container";
 import PokeSearchContainer from "../PokeSearch/container";
+import PokeList from './component';
 
 const PokeListContainer = () => {
   const store = useStoreCtx()
-  const [ pokemonList, setpokemonList ] = useState<PokemonResultT[]>([])
+  const [ pokemonList, setPokemonList ] = useState<PokemonResultT[]>([])
   const [ pokemonFiltered, setPokemonFiltered ] = useState<PokemonResultT[]>([])
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -17,7 +16,7 @@ const PokeListContainer = () => {
     void (async () => {
         try {
           const data = await store.getPokemonList()
-          setpokemonList(data.slice(0, 20))
+          setPokemonList(data)
         } catch (e) {
           console.log('Error getting pokemon list')
         }
@@ -45,13 +44,7 @@ const PokeListContainer = () => {
   return (
     <div>
       <PokeSearchContainer onSearch={onSearch}/>
-      <ul className="flex flex-row flex-wrap gap-6">
-        {pokemonFiltered.map((p) => (
-          <li key={p.name}>
-            <PokeItemContainer result={p} />
-          </li>
-      ) )}
-      </ul>
+      <PokeList list={pokemonFiltered}/>
     </div>
       )
 }
