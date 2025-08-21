@@ -1,80 +1,88 @@
-![reactjs-vite-tailwindcss-boilerplate](https://user-images.githubusercontent.com/16243531/217138979-b854309c-4742-4275-a705-f9fec5158217.jpg)
+# POKEAPP
 
-# React Tailwindcss Boilerplate build with Vite
+Aplicacion para listar pokemons, obtenidos de pokeapi. Implementa la busqueda de pokemones, paginacion local, y persistencia local de la data.
 
-This is a boilerplate build with Vite, React 18, TypeScript, Vitest, Testing Library, TailwindCSS 3, Eslint and Prettier.
+## Instrucciones para ejecucion local
 
-## What is inside?
+### Dependencias
+- Node 22
+- Go 1.24.5
 
-This project uses many tools like:
+### Front-end
+- Clonar repo
+```
+git clone https://github.com/Edax97/pokeApp
+cd pokeApp
+```
+- Instalar dependencias
+```
+npm i
+```
+- Iniciar el servidor de desarrollo:
+```
+npm run dev
+```
+- La URL del back apuntara por defecto a `http://localhost:8000`
 
-- [Vite](https://vitejs.dev)
-- [ReactJS](https://reactjs.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [Vitest](https://vitest.dev)
-- [Testing Library](https://testing-library.com)
-- [Tailwindcss](https://tailwindcss.com)
-- [Eslint](https://eslint.org)
-- [Prettier](https://prettier.io)
-
-## Getting Started
-
-### Install
-
-Create the project.
-
-```bash
-pnpm dlx degit joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate my-app
+### Back-end
+- Clonar repo
+```
+git clone https://github.com/Edax97/api
+cd api
+```
+- Instalar dependencias
+```
+go mod tidy
+```
+- Ejecutar servidor en `http://localhost:8000`
+```
+go run .
 ```
 
-Access the project directory.
+## Stack
 
-```bash
-cd my-app
+### Front-end
+- React levantado con Vite
+- Tailwind v3 para estilos
+- Vercel para el despliegue continuo: [app](https://poke-app-ashen.vercel.app/)
+
+### Back-end
+- Cliente en go del API pokeapi: [pokeapi-go](https://github.com/mtslzr/pokeapi-go/tree/master)
+- Router con la libreria estandar net/http
+- Geneacion de imagen con docker
+- Despliegue como Azure Webapp desde un Azure Container Registry
+
+## Desiciones de diseño
+
+### Metodos del API
+```
+GET URL/pokelist/
+JSON [{ "url", "name"}]
+```
+```
+GET URL/poke/:name
+JSON {
+  name: string
+  abilities: string[]
+  sprite: string
+  stats: {
+    hp: number
+    attack: number
+    defense: number
+    special_attack: number
+    special_defense: number
+    speed: number
+  }
+}
+
 ```
 
-Install dependencies.
+- Se opto por exponer dos metodos en el API y realizar la busqueda y paginacion enteramente desde el front-end. Debido a ello, la data (`/pokelist/`, solo incluye `url` y `name`) no es tan grande y se puede realizar el filtrado con eficiencia.
 
-```bash
-pnpm install
-```
+- Las alternativa de enviar la lista de pokemones paginada desde el back complejiza el filtrado (se tendria que incluir un metodo de busqueda) y el guardado local de la data.
 
-Serve with hot reload at <http://localhost:5173>.
+- La gran cantidad de llamadas al API (una por cada `/poke/:name`) se ve mitigada por la persistencia local de datos en el cliente, y por los mecanismos de cache en el servidor (implementados en `pokeapi-go`).
 
-```bash
-pnpm run dev
-```
+- De esta manera tambien se reduce la codependencia entre el cliente y la API.
 
-### Lint
 
-```bash
-pnpm run lint
-```
-
-### Typecheck
-
-```bash
-pnpm run typecheck
-```
-
-### Build
-
-```bash
-pnpm run build
-```
-
-### Test
-
-```bash
-pnpm run test
-```
-
-View and interact with your tests via UI.
-
-```bash
-pnpm run test:ui
-```
-
-## License
-
-This project is licensed under the MIT License.
